@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
-const cheerio = require('cheerio');
 const Match = require('../models/Match');
 const Notice = require('../models/Notice');
+const userAgent =  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36"
 
 async function getFuriaLastMatches() {
     const url = 'https://www.hltv.org/results?team=8297';
@@ -9,37 +9,35 @@ async function getFuriaLastMatches() {
     try {
         const browser = await puppeteer.launch({ headless: 'new' });
         const page = await browser.newPage();
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36');
-
+        await page.setUserAgent(userAgent);
         await page.goto(url, { waitUntil: 'domcontentloaded' });
+        // await page.waitForSelector('.result', { timeout: 10000 });
 
-        await page.waitForSelector('.result', { timeout: 10000 });
+        const matchesData = await page.evaluate(() => {
+            const matches = [];
+            const elements = document.querySelectorAll('.result');
 
-        const html = await page.content();
-        const $ = cheerio.load(html);
+            elements.forEach((el) => {
+                const team1 = el.querySelector('.team-cell .team')?.textContent.trim() || '';
+                const team2 = el.querySelectorAll('.team-cell .team')?.[1]?.textContent.trim() || '';
+                const scoreLost = el.querySelector('.score-lost')?.textContent.trim() || '';
+                const scoreWon = el.querySelector('.score-won')?.textContent.trim() || '';
+                const event = el.querySelector('.event-name')?.textContent.trim() || '';
 
-        const matches = [];
+                matches.push({
+                    team1,
+                    team2,
+                    score: `${scoreLost} - ${scoreWon}`,
+                    event
+                });
+            });
 
-        $('.result').each((_, el) => {
-            const team1 = $(el).find('.team-cell .team').first().text().trim();
-            const team2 = $(el).find('.team-cell .team').last().text().trim();
-            const scoreLost = $(el).find('.score-lost').text().trim();
-            const scoreWon = $(el).find('.score-won').text().trim();
-            const score = `${scoreLost} - ${scoreWon}`;
-            const event = $(el).find('.event-name').text().trim();
-
-            matches.push(new Match(
-                team1,
-                team2,
-                score,
-                event
-            )
-            );
+            return matches;
         });
 
         await browser.close();
 
-        return matches;
+        return matchesData.map(m => new Match(m.team1, m.team2, m.score, m.event));
     } catch (error) {
         console.error('Erro ao acessar resultados:', error.message);
         return [];
@@ -51,33 +49,32 @@ async function getFuriaNews() {
 
     const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36');
-
+    await page.setUserAgent(userAgent);
     await page.goto(url, { waitUntil: 'domcontentloaded' });
+    // await page.waitForSelector('.subTab-newsArticle', { timeout: 10000 });
 
-    await page.waitForSelector('.subTab-newsArticle', { timeout: 10000 });
+    const newsData = await page.evaluate(() => {
+        const news = [];
+        const elements = document.querySelectorAll('.subTab-newsArticle');
 
-    const html = await page.content();
-    const $ = cheerio.load(html);
+        elements.forEach((el, index) => {
+            if (index >= 10) return;
 
-    const news = [];
+            const relativeLink = el.getAttribute('href') || '';
+            const link = `https://www.hltv.org${relativeLink}`;
+            const date = el.querySelector('.subTab-newsDate')?.textContent.trim() || '';
+            const fullText = el.textContent.trim();
+            const title = fullText.replace(date, '').trim();
 
-    $('.subTab-newsArticle').each((index, el) => {
-        if (index >= 10) return false;
+            news.push({ link, date, title });
+        });
 
-        const relativeLink = $(el).attr('href');
-        const link = `https://www.hltv.org${relativeLink}`;
-        const date = $(el).find('.subTab-newsDate').text().trim();
-        const fullText = $(el).text().trim();
-        const title = fullText.replace(date, '').trim();
-
-
-        news.push(new Notice(link, date, title));
+        return news;
     });
 
     await browser.close();
 
-    return news;
+    return newsData.map(n => new Notice(n.link, n.date, n.title));
 }
 
 

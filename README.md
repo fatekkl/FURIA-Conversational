@@ -76,7 +76,6 @@ Quando o usuário escolhe a opção **Calendário Completo**, o bot exibe os pr�
 - **Node.js**: Ambiente de execução JavaScript no servidor.
 - **Telegram Bot API**: API utilizada para interagir com o Telegram.
 - **Puppeteer**: Biblioteca para scraping de dados da web.
-- **Cheerio**: Biblioteca para parsing de HTML e extração de dados.
 
 
 ## Licença
