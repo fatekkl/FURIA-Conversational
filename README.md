@@ -87,3 +87,4 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 - [ ] Criar comando para exibição das últimas notícias.
 - [ ] Adicionar prospecção de melhorias no README.
 - [ ] Estudar fontes para exibição dos jogos FUTUROS.
+- [ ] Hospedar o Bot

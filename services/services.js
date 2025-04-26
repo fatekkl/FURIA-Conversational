@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
+const Match = require('../models/Match');
 
 async function getFuriaLastMatches() {
     const url = 'https://www.hltv.org/results?team=8297';
@@ -16,7 +17,7 @@ async function getFuriaLastMatches() {
         const html = await page.content();
         const $ = cheerio.load(html);
 
-        const matches  = [];
+        const matches = [];
 
         $('.result').each((_, el) => {
             const team1 = $(el).find('.team-cell .team').first().text().trim();
@@ -26,12 +27,13 @@ async function getFuriaLastMatches() {
             const score = `${scoreLost} - ${scoreWon}`;
             const event = $(el).find('.event-name').text().trim();
 
-            matches.push({
+            matches.push(new Match(
                 team1,
                 team2,
                 score,
                 event
-            });
+            )
+            );
         });
 
         await browser.close();

@@ -34,7 +34,7 @@ module.exports = (bot) => {
                     recentMessage += `Placar: ${matches[i].score}\n`;
                     recentMessage += `Evento: ${matches[i].event}\n\n`;
                 }
-
+            
                 bot.sendMessage(chatId, recentMessage);
                 break;
             case "ultimos_25":
