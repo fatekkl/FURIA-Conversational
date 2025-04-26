@@ -17,7 +17,7 @@ O FURIA Bot é um bot do Telegram que fornece informações sobre a equipe FURIA
 Clone o repositório do bot em sua máquina local:
 
 ```bash
-git clone https://github.com/SEU-USUARIO/furia-bot.git
+git clone https://github.com/fatekkl/furia-bot.git
 cd furia-bot
 ```
 
@@ -53,7 +53,7 @@ Agora, o bot estará rodando e pronto para responder aos comandos no Telegram.
 - **/menu**: Exibe os comandos disponíveis para o usuário.
 - **/jogos**: Exibe uma lista dos últimos jogos da FURIA ou o calendário completo de jogos.
 - **/noticias**: Exibe as últimas notícias relacionadas à FURIA.
-- **/quiz**: Teste seus conhecimentos com um quiz interativo sobre a FURIA (funcionalidade futura).
+- **/quiz**: Teste seus conhecimentos com um quiz interativo sobre a FURIA.
 
 ### Jogos Recentes
 
@@ -67,6 +67,7 @@ Quando o usuário escolhe a opção **Calendário Completo**, o bot exibe os pr�
 
 - `index.js`: Arquivo principal que inicializa o bot, prepara os comandos e interações.
 - `commands/`: Pasta que contém o arquivo responsável por definir a funcionalidade de cada comando
+- `models/`: Pasta que contém arquivos de classes ou interfaces, definindo regras pro código e melhorando a organização
 - `services/services.js`: Serviço que coleta as informações dos últimos jogos da FURIA através de scraping na HLTV usando Puppeteer.
 - `.env`: Arquivo de configuração que contém o token do bot do Telegram.
 
@@ -84,7 +85,8 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ### TODO
 
-- [ ] Criar comando para exibição das últimas notícias.
+- [x] Criar comando para exibição das últimas notícias.
 - [ ] Adicionar prospecção de melhorias no README.
-- [ ] Estudar fontes para exibição dos jogos FUTUROS.
+- [x] Estudar fontes para exibição dos jogos FUTUROS.
+- [x] Criar classe para organizar melhor as partidas.
 - [ ] Hospedar o Bot
