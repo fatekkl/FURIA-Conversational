@@ -6,10 +6,12 @@ const bot = new TelegramBot(bot_token, { polling: true });
 // Importar e usar os comandos
 const jogosCommand = require('./commands/jogos');
 const quizCommand = require('./commands/quiz');
+const noticiasCommand = require('./commands/noticias')
 
 // Inicializar os comandos
 jogosCommand(bot);
 quizCommand(bot);
+noticiasCommand(bot)
 
 // Comando /start
 bot.onText(/\/start/, (msg) => {
