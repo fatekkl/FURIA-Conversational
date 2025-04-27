@@ -7,11 +7,13 @@ async function getFuriaLastMatches() {
     const url = 'https://www.hltv.org/results?team=8297';
 
     try {
-        const browser = await puppeteer.launch({ headless: 'new' });
+        const browser = await puppeteer.launch({
+            headless: 'new',
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
         const page = await browser.newPage();
         await page.setUserAgent(userAgent);
         await page.goto(url, { waitUntil: 'domcontentloaded' });
-        // await page.waitForSelector('.result', { timeout: 10000 });
 
         const matchesData = await page.evaluate(() => {
             const matches = [];
@@ -36,7 +38,6 @@ async function getFuriaLastMatches() {
         });
 
         await browser.close();
-
         return matchesData.map(m => new Match(m.team1, m.team2, m.score, m.event));
     } catch (error) {
         console.error('Erro ao acessar resultados:', error.message);
@@ -44,38 +45,46 @@ async function getFuriaLastMatches() {
     }
 }
 
+
 async function getFuriaNews() {
     const url = "https://www.hltv.org/team/8297/furia#tab-newsBox";
 
-    const browser = await puppeteer.launch({ headless: 'new' });
-    const page = await browser.newPage();
-    await page.setUserAgent(userAgent);
-    await page.goto(url, { waitUntil: 'domcontentloaded' });
-    // await page.waitForSelector('.subTab-newsArticle', { timeout: 10000 });
+    try {
+        const browser = await puppeteer.launch({
+            headless: 'new',
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
+        const page = await browser.newPage();
+        await page.setUserAgent(userAgent);
+        await page.goto(url, { waitUntil: 'domcontentloaded' });
 
-    const newsData = await page.evaluate(() => {
-        const news = [];
-        const elements = document.querySelectorAll('.subTab-newsArticle');
+        const newsData = await page.evaluate(() => {
+            const news = [];
+            const elements = document.querySelectorAll('.subTab-newsArticle');
 
-        elements.forEach((el, index) => {
-            if (index >= 10) return;
+            elements.forEach((el, index) => {
+                if (index >= 10) return;
 
-            const relativeLink = el.getAttribute('href') || '';
-            const link = `https://www.hltv.org${relativeLink}`;
-            const date = el.querySelector('.subTab-newsDate')?.textContent.trim() || '';
-            const fullText = el.textContent.trim();
-            const title = fullText.replace(date, '').trim();
+                const relativeLink = el.getAttribute('href') || '';
+                const link = `https://www.hltv.org${relativeLink}`;
+                const date = el.querySelector('.subTab-newsDate')?.textContent.trim() || '';
+                const fullText = el.textContent.trim();
+                const title = fullText.replace(date, '').trim();
 
-            news.push({ link, date, title });
+                news.push({ link, date, title });
+            });
+
+            return news;
         });
 
-        return news;
-    });
-
-    await browser.close();
-
-    return newsData.map(n => new Notice(n.link, n.date, n.title));
+        await browser.close();
+        return newsData.map(n => new Notice(n.link, n.date, n.title));
+    } catch (error) {
+        console.error('Erro ao buscar notícias:', error.message);
+        return [];
+    }
 }
+
 
 
 module.exports = { getFuriaLastMatches, getFuriaNews };
