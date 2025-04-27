@@ -66,8 +66,8 @@ Quando o usuário escolhe a opção **Calendário Completo**, o bot exibe os pr�
 ## Arquivos
 
 - `index.js`: Arquivo principal que inicializa o bot, prepara os comandos e interações.
-- `commands/`: Pasta que contém o arquivo responsável por definir a funcionalidade de cada comando
-- `models/`: Pasta que contém arquivos de classes ou interfaces, definindo regras pro código e melhorando a organização
+- `commands/`: Pasta que contém o arquivo responsável por definir a funcionalidade de cada comando.
+- `models/`: Pasta que contém arquivos de classes ou interfaces, definindo regras pro código e melhorando a organização.
 - `services/services.js`: Serviço que coleta as informações dos últimos jogos da FURIA através de scraping na HLTV usando Puppeteer.
 - `.env`: Arquivo de configuração que contém o token do bot do Telegram.
 
@@ -77,15 +77,15 @@ Quando o usuário escolhe a opção **Calendário Completo**, o bot exibe os pr�
 - **Telegram Bot API**: API utilizada para interagir com o Telegram.
 - **Puppeteer**: Biblioteca para scraping de dados da web.
 
-
 ## Licença
 
-Este projeto está licenciado sob a [MIT License](LICENSE).
+Este projeto está licenciado sob a licença [Creative Commons Atribuição-NãoComercial 4.0 Internacional (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).  
+Você pode copiar e redistribuir o material em qualquer meio ou formato e adaptá-lo, **desde que não o utilize para fins comerciais** e forneça o devido crédito.
 
-### TODO
+## TODO
 
 - [x] Criar comando para exibição das últimas notícias.
 - [ ] Adicionar prospecção de melhorias no README.
 - [x] Estudar fontes para exibição dos jogos FUTUROS.
 - [x] Criar classe para organizar melhor as partidas.
-- [ ] Hospedar o Bot
+- [ ] Hospedar o Bot.
