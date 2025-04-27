@@ -19,38 +19,57 @@ module.exports = (bot) => {
         bot.sendMessage(chatId, "🎮 O que você quer saber?", options);
     });
 
+    // Memória simples para evitar múltiplos scrapes
+    let cachedMatches = null;
+    let lastFetchTime = 0;
+    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+
     bot.on("callback_query", async (callbackQuery) => {
         const chatId = callbackQuery.message.chat.id;
         const data = callbackQuery.data;
-        const matches = await getFuriaLastMatches();
+
+        // Se o cache estiver vazio ou muito velho, busca novamente
+        if (!cachedMatches || Date.now() - lastFetchTime > CACHE_DURATION) {
+            cachedMatches = await getFuriaLastMatches();
+            lastFetchTime = Date.now();
+        }
+
+        const matches = cachedMatches;
+
+        if (!matches.length) {
+            return bot.sendMessage(chatId, "⚠️ Nenhum jogo encontrado no momento.");
+        }
+
+        let message = '';
 
         switch (data) {
             case "jogos_recentes":
-                let recentMessage = '';
-
-                for (let i = 0; i < 5; i++) {
-                    recentMessage += `🏆 Jogo ${i + 1}:\n`;
-                    recentMessage += `${matches[i].team1} vs ${matches[i].team2}\n`;
-                    recentMessage += `Placar: ${matches[i].score}\n`;
-                    recentMessage += `Evento: ${matches[i].event}\n\n`;
-                }
-            
-                bot.sendMessage(chatId, recentMessage);
+                message = formatMatches(matches, 5);
                 break;
-            case "ultimos_25":
-                let completeMessage = '';
 
-                for (let i = 0; i < 25; i++) {
-                    completeMessage += `🏆 Jogo ${i + 1}:\n`;
-                    completeMessage += `${matches[i].team1} vs ${matches[i].team2}\n`;
-                    completeMessage += `Placar: ${matches[i].score}\n`;
-                    completeMessage += `Evento: ${matches[i].event}\n\n`;
-                }
-                bot.sendMessage(chatId, completeMessage);
+            case "ultimos_25":
+                message = formatMatches(matches, 25);
                 break;
 
             default:
-                break;
+                return; // Se não for um callback conhecido, não faz nada
         }
+
+        bot.sendMessage(chatId, message);
     });
 };
+
+// Função para formatar os jogos
+function formatMatches(matches, amount) {
+    const limit = Math.min(amount, matches.length);
+    let formatted = '';
+
+    for (let i = 0; i < limit; i++) {
+        formatted += `🏆 *Jogo ${i + 1}:*\n`;
+        formatted += `*${matches[i].team1}* vs *${matches[i].team2}*\n`;
+        formatted += `Placar: *${matches[i].score}*\n`;
+        formatted += `Evento: *${matches[i].event}*\n\n`;
+    }
+
+    return formatted;
+}
