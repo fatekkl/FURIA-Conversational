@@ -10,6 +10,8 @@ module.exports = (bot) => {
         try {
             const news = await getFuriaNews();
 
+            console.log("Noticias Obtidas: ", news)
+
             if (!news.length) {
                 return bot.sendMessage(chatId, "⚠️ Nenhuma notícia encontrada no momento.");
             }
