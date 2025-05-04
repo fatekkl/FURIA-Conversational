@@ -27,48 +27,56 @@ module.exports = (bot) => {
         }
     ];
 
-    // Estado de cada usuário
-    const userState = {};
+    const userStates = {}; // Armazena o progresso por usuário
 
+    // Inicia o quiz
     bot.onText(/\/quiz/, (msg) => {
         const chatId = msg.chat.id;
 
-        userState[chatId] = {
+        userStates[chatId] = {
             currentQuestionIndex: 0,
             score: 0
         };
 
-        askQuestion(chatId);
+        sendQuestion(chatId);
     });
 
-    const askQuestion = (chatId) => {
-        const state = userState[chatId];
-        const currentQuestion = questions[state.currentQuestionIndex];
+    // Envia pergunta com inline keyboard
+    const sendQuestion = (chatId) => {
+        const state = userStates[chatId];
+        if (!state) return;
 
-        const options = currentQuestion.options.map(option => ({
-            text: option,
-            callback_data: option
-        }));
-
+        const current = questions[state.currentQuestionIndex];
         const optionsMarkup = {
             reply_markup: {
-                inline_keyboard: options.map(option => [option])
+                inline_keyboard: current.options.map(option => [
+                    { text: option, callback_data: `quiz|${option}` }
+                ])
             }
         };
 
-        bot.sendMessage(chatId, currentQuestion.question, optionsMarkup);
+        bot.sendMessage(chatId, current.question, optionsMarkup);
     };
 
-    const checkAnswer = (callbackQuery) => {
+    // Trata respostas de qualquer usuário, sem depender de comando anterior
+    bot.on("callback_query", (callbackQuery) => {
         const chatId = callbackQuery.message.chat.id;
-        const state = userState[chatId];
+        const messageId = callbackQuery.message.message_id;
 
-        if (!state) {
-            bot.sendMessage(chatId, "❗ Comece o quiz com /quiz primeiro!");
+        const [prefix, userAnswer] = callbackQuery.data.split('|');
+
+        if (prefix !== "quiz") {
+            // Ignora outras interações que não sejam do quiz
             return;
         }
 
-        const userAnswer = callbackQuery.data;
+        const state = userStates[chatId];
+        if (!state) {
+            bot.sendMessage(chatId, "❗ Por favor, inicie o quiz com /quiz primeiro.");
+            bot.answerCallbackQuery(callbackQuery.id);
+            return;
+        }
+
         const correctAnswer = questions[state.currentQuestionIndex].answer;
 
         if (userAnswer === correctAnswer) {
@@ -81,15 +89,13 @@ module.exports = (bot) => {
         state.currentQuestionIndex++;
 
         if (state.currentQuestionIndex < questions.length) {
-            askQuestion(chatId);
+            sendQuestion(chatId);
         } else {
-            bot.sendMessage(chatId, `🎉 Você completou o quiz! Sua pontuação final é: ${state.score} de ${questions.length}.`);
-            delete userState[chatId]; // Limpa o progresso
+            bot.sendMessage(chatId, `🎉 Você finalizou o quiz! Pontuação final: ${state.score}/${questions.length}.`);
+            delete userStates[chatId];
         }
 
-        // Remove o botão de resposta (opcional)
+        // Confirmação da interação com o botão
         bot.answerCallbackQuery(callbackQuery.id);
-    };
-
-    bot.on("callback_query", checkAnswer);
+    });
 };
