@@ -65,27 +65,27 @@ async function getFuriaLastMatches() {
 const backupNews = [
     {
         title: "FURIA finaliza preparação para próximo torneio internacional",
-        link: "https://www.hltv.org/news/furia",
+        link: "https://www.hltv.org/team/8297/furia#tab-newsBox",
         date: "Data atualizada diariamente"
     },
     {
         title: "Jogadores da FURIA comentam sobre treinamentos",
-        link: "https://www.hltv.org/news/furia",
+        link: "https://www.hltv.org/team/8297/furia#tab-newsBox",
         date: "Data atualizada diariamente"
     },
     {
         title: "FURIA busca manter boa fase no cenário competitivo",
-        link: "https://www.hltv.org/news/furia",
+        link: "https://www.hltv.org/team/8297/furia#tab-newsBox",
         date: "Data atualizada diariamente"
     },
     {
         title: "Análise: o desempenho da FURIA nas últimas partidas",
-        link: "https://www.hltv.org/news/furia",
+        link: "https://www.hltv.org/team/8297/furia#tab-newsBox",
         date: "Data atualizada diariamente"
     },
     {
         title: "FURIA anuncia agenda de jogos para o próximo mês",
-        link: "https://www.hltv.org/news/furia",
+        link: "https://www.hltv.org/team/8297/furia#tab-newsBox",
         date: "Data atualizada diariamente"
     }
 ];
