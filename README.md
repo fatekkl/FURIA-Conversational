@@ -7,7 +7,7 @@ O FURIA Bot é um bot do Telegram que fornece informações sobre a equipe FURIA
 - **/start**: Inicia o bot e dá as boas-vindas ao usuário.
 - **/menu**: Exibe os comandos disponíveis no bot.
 - **/jogos**: Exibe opções sobre os últimos jogos ou o calendário completo de jogos da equipe FURIA.
-- **/noticias**: Exibe as últimas notícias sobre a equipe FURIA (a funcionalidade de notícias ainda pode ser adicionada).
+- **/noticias**: Exibe as últimas notícias sobre a equipe FURIA.
 - **/quiz**: Teste seus conhecimentos sobre a FURIA com um quiz interativo (a funcionalidade do quiz também pode ser adicionada no futuro).
 
 ## Instalação
