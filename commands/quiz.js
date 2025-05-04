@@ -73,8 +73,10 @@ module.exports = (bot) => {
 
         askQuestion();
 
-        bot.on("callback_query", (callbackQuery) => {
-            checkAnswer(callbackQuery);
-        });
+        
+    });
+
+    bot.on("callback_query", (callbackQuery) => {
+        checkAnswer(callbackQuery);
     });
 };
