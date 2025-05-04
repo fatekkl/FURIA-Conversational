@@ -7,7 +7,7 @@ O FURIA Bot é um bot do Telegram que fornece informações sobre a equipe FURIA
 - **/start**: Inicia o bot e dá as boas-vindas ao usuário.
 - **/menu**: Exibe os comandos disponíveis no bot.
 - **/jogos**: Exibe opções sobre os últimos jogos ou o calendário completo de jogos da equipe FURIA.
-- **/noticias**: Exibe as últimas notícias sobre a equipe FURIA (a funcionalidade de notícias ainda pode ser adicionada).
+- **/noticias**: Exibe as últimas notícias sobre a equipe FURIA.
 - **/quiz**: Teste seus conhecimentos sobre a FURIA com um quiz interativo (a funcionalidade do quiz também pode ser adicionada no futuro).
 
 ## Instalação
@@ -77,6 +77,10 @@ Quando o usuário escolhe a opção **Calendário Completo**, o bot exibe os pr�
 - **Telegram Bot API**: API utilizada para interagir com o Telegram.
 - **Puppeteer**: Biblioteca para scraping de dados da web.
 
+## Possíveis Melhorias 
+
+Durante o desenvolvimento do projeto, foi um desafio otimizar obter os dados de notícias e jogos, decidi seguir utilizando Web Scrapping e isso custou determinado desempenho para o projeto, que apesar de ter conseguido otimizar bastante, cerca de 52%. Ainda poderia ser otimizado com melhorias no tratamento de erros e integração com uma API, evitando o uso do puppeteer que é relativamente pesado.
+
 ## Licença
 
 Este projeto está licenciado sob a licença [Creative Commons Atribuição-NãoComercial 4.0 Internacional (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).  
@@ -85,7 +89,7 @@ Você pode copiar e redistribuir o material em qualquer meio ou formato e adapt�
 ## TODO
 
 - [x] Criar comando para exibição das últimas notícias.
-- [ ] Adicionar prospecção de melhorias no README.
+- [x] Adicionar prospecção de melhorias no README.
 - [x] Estudar fontes para exibição dos jogos FUTUROS.
 - [x] Criar classe para organizar melhor as partidas.
-- [ ] Hospedar o Bot.
+- [x] Hospedar o Bot.
