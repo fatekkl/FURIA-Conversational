@@ -1,4 +1,3 @@
- commands/noticias.js
 const { getFuriaNews } = require("../services/services");
 
 module.exports = (bot) => {
